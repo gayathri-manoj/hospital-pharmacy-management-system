@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Medicine Inventory</h3>
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Expiry Date</th>
+            <th>Price (₹)</th>
+            <th>Added By</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for med in medicines %}
+        {% set row_class = '' %}
+        {% if med.expiry_date < today %}
+            {% set row_class = 'table-danger' %}
+        {% elif med.expiry_date <= soon_threshold %}
+            {% set row_class = 'table-warning' %}
+        {% elif med.quantity < 5 %}
+            {% set row_class = 'table-info' %}
+        {% endif %}
+        <tr class="{{ row_class }}">
+            <td>{{ med.id }}</td>
+            <td>{{ med.name }}</td>
+            <td>{{ med.quantity }}</td>
+            <td>{{ med.expiry_date }}</td>
+            <td>{{ med.price }}</td>
+            <td>{{ med.added_by }}</td>
+            <td>
+                {% if role == 'staff' %}
+                  <a href="/delete/{{ med.id }}" class="btn btn-sm btn-danger">Delete</a>
+                {% else %}
+                  <span class="text-muted">No Access</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

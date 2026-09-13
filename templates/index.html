@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="text-center mt-4">
+    <h2>Welcome, {{ session['user'] }}</h2>
+
+    {% if role == 'manager' %}
+      <p class="lead">Manager Dashboard — Supervise and track staff activities.</p>
+      <a href="/manager_dashboard" class="btn btn-dark"> View Activity Logs</a>
+      <a href="/manager_summary" class="btn btn-success"> Summary Report</a>
+      <a href="/medicines" class="btn btn-info"> View Inventory</a>
+
+    {% else %}
+      <p class="lead">Staff Dashboard — Manage and update stock.</p>
+      <a href="/add" class="btn btn-success"> Add Medicine</a>
+      <a href="/medicines" class="btn btn-info"> View Inventory</a>
+      <a href="/billing" class="btn btn-warning"> Generate Bill</a>  <!-- 🔸 New line -->
+    {% endif %}
+</div>
+{% endblock %}

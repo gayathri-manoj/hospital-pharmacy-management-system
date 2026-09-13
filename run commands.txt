@@ -1,0 +1,5 @@
+cd hospital_pharmacy_system
+python -m venv venv
+venv\Scripts\activate
+python app.py
+

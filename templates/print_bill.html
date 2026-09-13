@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    body {
+        background-color: #f9f9f9;
+    }
+    .invoice-container {
+        max-width: 800px;
+        margin: 30px auto;
+        background: #fff;
+        border: 2px solid #333;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    .header {
+        text-align: center;
+        border-bottom: 2px solid #333;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+    .header h2 {
+        margin: 0;
+        color: #007bff;
+    }
+    .details p {
+        margin: 3px 0;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+    th, td {
+        border: 1px solid #555;
+        padding: 10px;
+        text-align: center;
+    }
+    th {
+        background-color: #222;
+        color: #fff;
+    }
+    tfoot td {
+        font-weight: bold;
+        background-color: #eee;
+    }
+    .footer {
+        text-align: center;
+        margin-top: 30px;
+        font-style: italic;
+        color: #555;
+    }
+    @media print {
+        .no-print {
+            display: none;
+        }
+        body {
+            background: #fff;
+        }
+        .invoice-container {
+            box-shadow: none;
+            border: none;
+        }
+    }
+</style>
+
+<div class="invoice-container">
+    <div class="header">
+        <h2>Hospital Pharmacy Billing System</h2>
+        <p><strong>Address:</strong> 123 Health Street, City Hospital</p>
+        <p><strong>Phone:</strong> +91 98765 43210 | <strong>Email:</strong> pharmacy@hospital.com</p>
+    </div>
+
+    <div class="details">
+        <p><strong>Customer Name:</strong> {{ bill.customer_name }}</p>
+        <p><strong>Bill Date:</strong> {{ bill.bill_date.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+        <p><strong>Cashier:</strong> {{ bill.created_by }}</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Medicine</th>
+                <th>Quantity</th>
+                <th>Price per Unit (₹)</th>
+                <th>Subtotal (₹)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.medicine_name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ "%.2f"|format(item.price) }}</td>
+                <td>{{ "%.2f"|format(item.subtotal) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3">Total Amount</td>
+                <td>₹{{ "%.2f"|format(bill.total_amount) }}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="footer">
+        <p>Thank you for your purchase! Stay healthy and visit us again.</p>
+    </div>
+
+    <div class="text-center mt-3 no-print">
+        <button class="btn btn-success" onclick="window.print()">🖨️ Print Bill</button>
+        <a href="{{ url_for('billing') }}" class="btn btn-secondary">Back to Billing</a>
+    </div>
+</div>
+{% endblock %}
